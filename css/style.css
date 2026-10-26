@@ -1,0 +1,204 @@
+/* Сайт-приглашение «Письмо при свече». Чистый CSS, без внешних подключений.
+   Палитра: стол #2A1B19, бархат #3B2622, бумага #EFE2CB, пепел #D8BC97, медь #C4904F */
+:root{
+  --c-table:#2A1B19; --c-velvet:#3B2622; --c-paper:#EFE2CB; --c-ash:#D8BC97; --c-copper:#C4904F;
+  --paper-rgb:239,226,203; --table-rgb:42,27,25; --velvet-rgb:59,38,34; --copper-rgb:196,144,79;
+  --vh:1vh;
+  --env-w:min(88vw, 440px, calc(var(--vh) * 58));
+  --env-h:calc(var(--env-w) / 1.45);
+  --ease-std:cubic-bezier(.4,0,.2,1);
+  --ease-flap:cubic-bezier(.45,0,.2,1);
+  --ease-card:cubic-bezier(.2,.8,.2,1);
+  --safe-t:env(safe-area-inset-top,0px);
+  --safe-b:env(safe-area-inset-bottom,0px);
+  --safe-l:env(safe-area-inset-left,0px);
+  --safe-r:env(safe-area-inset-right,0px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;background:var(--c-table)}
+body{margin:0;background:var(--c-table);color:var(--c-paper);font:400 20px/1.55 'Literata',Georgia,'Times New Roman',serif;min-height:100vh}
+body.locked{overflow:hidden;min-height:0;height:100vh;height:calc(var(--vh) * 100)}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button,.btn,.slideshow{touch-action:manipulation}
+[hidden]{display:none!important}
+:focus{outline:none}
+:focus-visible{outline:2px solid var(--c-paper);outline-offset:2px}
+.sheet :focus-visible{outline-color:var(--c-table)}
+.salute:focus{outline:none}
+
+/* ---------- общие слои ---------- */
+.overlay{position:fixed;left:0;top:0;width:100%;height:100vh;height:calc(var(--vh) * 100);overflow:hidden;background:var(--c-table)}
+.cover{z-index:20}
+.slideshow{z-index:30}
+.final{z-index:30}
+.glow{position:absolute;right:-40vw;top:-30vh;width:150vw;height:150vw;max-width:1400px;max-height:1400px;border-radius:50%;pointer-events:none;z-index:0;
+  background:radial-gradient(circle,rgba(var(--copper-rgb),.38) 0,rgba(var(--copper-rgb),0) 70%);opacity:.58}
+.horizon{position:absolute;left:0;bottom:0;width:100%;height:22vh;height:calc(var(--vh) * 22);max-height:170px;pointer-events:none;z-index:0;display:block}
+
+/* ---------- кнопка звука ---------- */
+.sound{position:fixed;top:calc(16px + var(--safe-t));right:calc(16px + var(--safe-r));width:48px;height:48px;border-radius:50%;z-index:100;padding:0;
+  background:var(--c-velvet);border:1px solid rgba(var(--paper-rgb),.5);box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center}
+.sound::before{content:"";position:absolute;top:-4px;right:-4px;bottom:-4px;left:-4px;border-radius:50%}
+.sound .ic{width:24px;height:24px;display:block;pointer-events:none}
+.sound .ic-on{color:var(--c-paper)}
+.sound .ic-off{color:var(--c-ash);display:none}
+.sound[aria-pressed="false"] .ic-on{display:none}
+.sound[aria-pressed="false"] .ic-off{display:block}
+.sound-tip{position:fixed;z-index:100;top:calc(72px + var(--safe-t));right:calc(16px + var(--safe-r));white-space:nowrap;background:var(--c-velvet);color:var(--c-ash);
+  font-size:18px;line-height:1.3;padding:8px 12px;border-radius:10px;border:1px solid rgba(var(--paper-rgb),.35);opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .2s,visibility 0s .2s}
+.sound-tip.show{opacity:1;visibility:visible;transition:opacity .2s}
+
+/* ---------- обложка ---------- */
+.cover{display:flex;flex-direction:column;align-items:center;justify-content:space-between;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:calc(52px + var(--safe-t)) 16px calc(24px + var(--safe-b))}
+.cover>.glow,.cover>.horizon{position:fixed}
+.names{position:relative;z-index:2;margin:0;font:400 clamp(40px,11vw,52px)/1.1 'Oranienbaum','Playfair Display',Georgia,serif;text-align:center;color:var(--c-paper);letter-spacing:.01em}
+.stage{position:relative;z-index:2;width:var(--env-w);height:var(--env-h);margin:24px 0;flex:none}
+.env{position:absolute;left:0;top:0;width:100%;height:100%;z-index:2;perspective:900px;-webkit-perspective:900px}
+.peek{position:absolute;z-index:1;right:-3%;top:-13%;width:40%;padding:3.5%;background:var(--c-paper);transform:rotate(-6deg);box-shadow:-8px 12px 24px rgba(0,0,0,.4)}
+.ph{position:relative;width:100%;padding-top:var(--first-pt,133.333%);overflow:hidden;background:#cbb79a}
+.ph img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;object-position:50% 25%}
+.peek .ph{padding-top:60%}
+.peek .ph img{object-position:50% 76%}  /* подобрано под первое фото (селфи среди роз): из-за конверта видны лица */
+.env-back{position:absolute;z-index:2;left:0;top:0;width:100%;height:100%;background:#E6D5B9;border-radius:4px;box-shadow:-14px 22px 44px rgba(0,0,0,.45),0 2px 4px rgba(0,0,0,.3)}
+.env-back::after{content:"";position:absolute;left:0;top:0;width:100%;height:100%;border-radius:4px;box-shadow:-18px 30px 56px rgba(0,0,0,.5);opacity:0}
+.env-front{position:absolute;z-index:4;left:0;top:0;width:100%;height:100%;background:var(--c-paper);border-radius:4px;overflow:hidden}
+.env-front .folds{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
+.flap{position:absolute;z-index:5;left:0;top:0;width:100%;height:55%;display:block;transform-origin:50% 0;-webkit-transform-origin:50% 0;overflow:visible}
+.flap-face{fill:#EAD9BE;stroke:rgba(42,27,25,.14);stroke-width:1;vector-effect:non-scaling-stroke}
+.flap-lining{fill:var(--c-copper);opacity:0}
+.hand{position:absolute;z-index:6;left:5%;right:5%;top:56%;margin:0;text-align:center;font:400 36px/.95 'Marck Script','Literata',cursive;
+  font-size:clamp(26px, calc(var(--env-w) * .1), 36px);color:var(--c-velvet);transform:rotate(-2deg) translateX(6px);pointer-events:none}
+.card-clip{position:absolute;z-index:1;left:0;right:0;top:-600px;bottom:3%;overflow:hidden}
+.card{--rise:80%;position:absolute;left:7%;top:calc(600px + 2%);width:86%;padding:calc(var(--env-w) * .86 * .033);background:var(--c-paper);border-radius:3px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.card.flying{position:fixed;z-index:60;transform-origin:0 0;transition:transform .8s var(--ease-std)}
+.cover-bottom{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;width:100%;flex:none}
+.open-btn{width:var(--env-w);min-width:280px;max-width:100%;height:60px;border:0;border-radius:14px;background:var(--c-paper);color:var(--c-table);
+  font-weight:500;font-size:20px;box-shadow:0 8px 24px rgba(0,0,0,.35);transition:transform .12s,filter .12s}
+.open-btn:active{transform:scale(.97)}
+.hint{margin:12px 0 0;font-size:18px;color:var(--c-ash);text-align:center}
+@media (max-height:520px){
+  .cover{padding-top:calc(20px + var(--safe-t));padding-bottom:calc(12px + var(--safe-b))}
+  .names{font-size:36px}
+  .stage{margin:12px 0}
+  .open-btn{height:52px}
+  .hint{margin-top:8px}
+}
+@media (max-height:400px){ .hint{display:none} }
+
+/* --- хореография открытия (3,0 с) --- */
+.cover.is-opening{pointer-events:none}
+.cover.is-opening .names,.cover.is-opening .hint{animation:fadeOut .3s var(--ease-std) forwards}
+.cover.is-opening .open-btn{animation:btnPress .3s var(--ease-std) forwards}
+.cover.is-opening .glow{animation:glowFlare .45s ease-out forwards,glowBack 1s ease-in-out 1.3s forwards}
+.cover.is-opening .env{animation:envLift .45s ease-out forwards,envDrop .5s ease-in 1.7s forwards}
+.cover.is-opening .env-back::after{animation:fadeIn .45s ease-out forwards}
+.cover.is-opening .peek{animation:peekHide .45s ease-in .35s forwards}
+.cover.is-opening .flap{animation:flapOpen .9s var(--ease-flap) .35s forwards}
+.cover.is-opening .flap-face{animation:faceOff .9s linear .35s forwards}
+.cover.is-opening .flap-lining{animation:liningOn .9s linear .35s forwards}
+.cover.is-opening .card{animation:cardRise 1s var(--ease-card) 1.1s forwards}
+.cover.is-opening .horizon{animation:fadeOut 1s ease-in-out 1.3s forwards}
+.cover.is-opening .card.flying{animation:none}
+/* тихая ветка: «уменьшить движение» или нет объёмных поворотов */
+.cover.is-opening-quiet{pointer-events:none}
+.cover.is-opening-quiet .names,.cover.is-opening-quiet .hint,.cover.is-opening-quiet .open-btn{animation:fadeOut .3s linear forwards}
+.cover.is-opening-quiet .glow{animation:glowFlareQuiet .4s linear forwards}
+.cover.is-opening-quiet .stage{animation:fadeOut .7s linear .2s forwards}
+.cover.is-opening-quiet .horizon{animation:fadeOut .8s linear .2s forwards}
+
+@keyframes fadeOut{to{opacity:0;visibility:hidden}}
+@keyframes fadeIn{to{opacity:1}}
+@keyframes btnPress{0%{transform:scale(1);opacity:1}40%{transform:scale(.97)}100%{transform:scale(.97);opacity:0;visibility:hidden}}
+@keyframes glowFlare{to{opacity:1;transform:scale(1.15)}}
+@keyframes glowBack{from{opacity:1;transform:scale(1.15)}to{opacity:.58;transform:scale(1)}}
+@keyframes glowFlareQuiet{to{opacity:.79}}
+@keyframes envLift{to{transform:translateY(-10px) scale(1.03)}}
+@keyframes envDrop{from{transform:translateY(-10px) scale(1.03);opacity:1}to{transform:translateY(30px) scale(1.03);opacity:0;visibility:hidden}}
+@keyframes peekHide{to{transform:rotate(-6deg) translateY(60px);opacity:0}}
+@keyframes flapOpen{0%{transform:rotateX(0);z-index:5}53%{z-index:5}54%{z-index:1}100%{transform:rotateX(-168deg);z-index:1}}
+@keyframes faceOff{0%,53%{opacity:1}54%,100%{opacity:0}}
+@keyframes liningOn{0%,53%{opacity:0}54%,82%{opacity:1}100%{opacity:0}}
+@keyframes cardRise{to{transform:translateY(calc(-1 * var(--rise)))}}
+
+/* ---------- показ фото ---------- */
+.slideshow{background:var(--c-table)}
+.slideshow .glow{animation:none}
+.slideshow.priming{background:transparent}
+.slideshow.priming .glow{visibility:hidden}
+.print{position:fixed;background:var(--c-paper);border-radius:3px;box-shadow:-14px 22px 44px rgba(0,0,0,.45);opacity:0;transition:opacity .8s var(--ease-std);z-index:2}
+.print.fast{transition-duration:.45s}
+.print.show{opacity:1}
+.print .ph{padding-top:0;height:100%;background:#cbb79a}
+.print .ph img{transform:scale(1);transition:transform 5.3s linear;object-position:50% 50%}
+.print.zoom .ph img{transform:scale(1.06)}
+.indicator{position:fixed;z-index:3;height:3px;display:flex;opacity:0;transition:opacity .4s}
+.indicator.show{opacity:1}
+.indicator i{display:block;flex:1;height:3px;margin-right:6px;background:rgba(216,188,151,.3);position:relative;overflow:hidden}
+.indicator i:last-child{margin-right:0}
+.indicator i.done{background:var(--c-ash)}
+.indicator i b{position:absolute;left:0;top:0;width:100%;height:100%;background:var(--c-ash);transform:scaleX(0);transform-origin:left}
+.indicator i.now b{transition:transform 4.5s linear;transform:scaleX(1)}
+.hint-photo{position:fixed;z-index:3;left:0;right:0;margin:0;text-align:center;font-size:18px;color:var(--c-ash);opacity:0;transition:opacity .4s;pointer-events:none}
+.hint-photo.show{opacity:1}
+.counter{position:fixed;z-index:3;left:calc(24px + var(--safe-l));bottom:calc(36px + var(--safe-b));font-size:18px;color:var(--c-ash);opacity:0;transition:opacity .4s}
+.counter.show{opacity:1}
+.skip{position:fixed;z-index:3;right:calc(20px + var(--safe-r));bottom:calc(24px + var(--safe-b));height:48px;padding:0 18px;border-radius:12px;background:var(--c-velvet);
+  border:1.5px solid rgba(var(--paper-rgb),.55);color:var(--c-paper);font-weight:500;font-size:18px;opacity:0;pointer-events:none;transition:opacity .4s,filter .12s}
+.skip.show{opacity:1;pointer-events:auto}
+.skip:active{filter:brightness(1.15)}
+.slideshow.leaving .print,.slideshow.leaving .indicator,.slideshow.leaving .hint-photo,.slideshow.leaving .counter,.slideshow.leaving .skip{opacity:0;transition-duration:.5s}
+
+/* ---------- письмо ---------- */
+.letter{position:relative;z-index:10;padding:0 0 48px}
+.letter.enter .sheet{animation:sheetUp .9s var(--ease-std) both}
+@keyframes sheetUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+.sheet{background:var(--c-paper);color:var(--c-table);margin:72px 0 0;padding:36px 24px calc(40px + var(--safe-b));border-radius:16px 16px 0 0;box-shadow:0 -6px 20px rgba(0,0,0,.25);
+  padding-left:max(24px,var(--safe-l));padding-right:max(24px,var(--safe-r))}
+.salute{margin:0;font:400 36px/1.15 'Oranienbaum','Playfair Display',Georgia,serif;color:var(--c-table)}
+.rule{width:48px;height:1.5px;background:var(--c-copper);margin:14px 0 22px}
+.sheet p{margin:0 0 18px;max-width:40ch;text-align:left}
+.when{border-top:1px solid rgba(var(--copper-rgb),.6);border-bottom:1px solid rgba(var(--copper-rgb),.6);padding:18px 0 14px;margin:26px 0}
+.when-row{margin-bottom:16px}
+.when-row:last-child{margin-bottom:0}
+.when-label{display:block;font-size:18px;color:var(--c-velvet);margin-bottom:4px}
+.when-row b{display:block;font-weight:700;font-size:24px;line-height:1.2;color:var(--c-table)}
+.when-row span.val{display:block;font-size:20px;line-height:1.4}
+.sig{display:flex;align-items:center;flex-wrap:wrap;margin:6px 0 0!important}
+.hand-sig{font:400 36px/1.1 'Marck Script','Literata',cursive;color:var(--c-velvet);margin-right:10px}
+.ring{font-size:24px;line-height:1}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:60px;border-radius:14px;font-weight:500;font-size:20px;text-decoration:none;border:0;margin:0}
+.btn-dark{background:var(--c-table);color:var(--c-paper);margin-top:36px}
+.btn-ghost{background:transparent;border:1.5px solid var(--c-table);color:var(--c-table);margin-top:14px}
+.btn:active{filter:brightness(.92)}
+.btn-ghost:active{background:rgba(var(--table-rgb),.06)}
+.days{text-align:center;margin:28px 0 0!important;max-width:none!important;color:var(--c-velvet)}
+.days b{font-weight:500;color:var(--c-table)}
+.horizon-ink{display:block;width:100%;height:56px;margin-top:40px;opacity:.35}
+.horizon-ink path{vector-effect:non-scaling-stroke}
+@media (min-width:720px){
+  .sheet{max-width:640px;margin:48px auto 0;padding:56px;border-radius:16px}
+  .btns{display:flex}
+  .btns .btn{min-width:240px;flex:1}
+  .btns .btn-ghost{margin-top:36px;margin-left:14px}
+}
+
+/* ---------- финал главной страницы ---------- */
+.final{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;opacity:0;transition:opacity .8s}
+.final.show{opacity:1}
+.final .names{margin-bottom:12px}
+.final .sub{margin:0 0 36px;color:var(--c-ash);font-size:20px;text-align:center}
+.final .open-btn{background:transparent;color:var(--c-paper);border:1.5px solid rgba(var(--paper-rgb),.7);box-shadow:none}
+
+/* ---------- уменьшить движение ---------- */
+@media (prefers-reduced-motion:reduce){
+  .print{transition-duration:.5s!important}
+  .print .ph img{transition:none!important;transform:none!important}
+  .indicator i.now b{transition:none}
+  .letter.enter .sheet{animation:fadeInOnly .5s linear both}
+  .open-btn:active{transform:none;filter:brightness(.94)}
+  .sound-tip,.hint-photo,.counter,.skip,.indicator,.final{transition:none}
+}
+@keyframes fadeInOnly{from{opacity:0}to{opacity:1}}

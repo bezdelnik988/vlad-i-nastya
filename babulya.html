@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Влад и Настя приглашают</title>
+<meta property="og:title" content="Влад и Настя приглашают">
+<meta property="og:description" content="6 ноября, 17:00, ресторан „Флоренция“">
+<meta property="og:image" content="https://vlad-i-nastya.website.yandexcloud.net/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vlad-i-nastya.website.yandexcloud.net/babulya">
+<meta name="theme-color" content="#2A1B19">
+<link rel="icon" href="data:,">
+<link rel="preload" as="image" href="img/photos/p01.jpg">
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="locked" style="--first-pt:133.333%" data-guest="babulya">
+<audio id="music" src="audio/music.mp3" preload="auto" loop playsinline webkit-playsinline></audio>
+
+<button class="sound" id="sound" type="button" aria-pressed="true" aria-label="Выключить музыку">
+  <svg class="ic ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a8 8 0 0 1 0 11"/></svg>
+  <svg class="ic ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M22 7l-7 10"/></svg></button>
+<div class="sound-tip" id="soundTip" role="status" aria-live="polite"></div>
+
+<section class="overlay cover" id="cover">
+  <div class="glow"></div>
+  <svg class="horizon" viewBox="0 0 390 160" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,160 L0,118 C14,100 36,96 52,106 C62,112 70,116 82,112 C98,100 120,98 134,108 C142,114 150,117 162,116 L230,116 C250,116 262,104 276,96 C288,89 298,100 312,82 C322,69 340,86 352,78 C364,72 376,90 390,96 L390,160 Z" fill="#3B2622" fill-opacity=".55"/>
+    <path d="M0,118 C14,100 36,96 52,106 C62,112 70,116 82,112 C98,100 120,98 134,108 C142,114 150,117 162,116 L230,116 C250,116 262,104 276,96 C288,89 298,100 312,82 C322,69 340,86 352,78 C364,72 376,90 390,96" fill="none" stroke="#C4904F" stroke-opacity=".10" stroke-width="1.5"/>
+  </svg>
+  <h1 class="names">Влад и Настя</h1>
+  <div class="stage" id="stage">
+    <div class="card-clip">
+      <div class="card" id="card"><div class="ph"><img src="img/photos/p01.jpg" alt=""></div></div>
+    </div>
+    <div class="env">
+      <div class="peek"><div class="ph"><img src="img/photos/p01.jpg" alt=""></div></div>
+      <div class="env-back"></div>
+      <div class="env-front">
+        <svg class="folds" viewBox="0 0 100 69" preserveAspectRatio="none" aria-hidden="true"><path d="M0,69 L50,38 L100,69" fill="none" stroke="rgba(42,27,25,.14)" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+      </div>
+      <svg class="flap" viewBox="0 0 100 38" preserveAspectRatio="none" aria-hidden="true">
+        <polygon class="flap-face" points="0,0 100,0 50,38"/>
+        <polygon class="flap-lining" points="0,0 100,0 50,38"/>
+      </svg>
+      <p class="hand">Для бабули</p>
+    </div>
+  </div>
+  <div class="cover-bottom">
+    <button class="open-btn" id="openBtn" type="button">Открыть приглашение</button>
+    <p class="hint" id="hint">Нажмите — включится музыка</p>
+  </div>
+</section>
+
+<section class="overlay slideshow" id="slideshow" hidden data-photos="p01.jpg 1200 1600, p02.jpg 1200 1600, p03.jpg 1200 1600, p04.jpg 925 1600, p05.jpg 1200 1600, p06.jpg 1200 1600, p07.jpg 1200 1600, p08.jpg 1066 1600, p09.jpg 1066 1600, p10.jpg 1066 1600, p11.jpg 1066 1600, p12.jpg 1066 1600, p13.jpg 1066 1600, p14.jpg 1066 1600, p15.jpg 1066 1600" role="button" aria-label="Следующее фото">
+  <div class="glow"></div>
+  <div class="print a" id="printA"><div class="ph"><img alt=""></div></div>
+  <div class="print b" id="printB"><div class="ph"><img alt=""></div></div>
+  <div class="indicator" id="indicator" aria-hidden="true"></div>
+  <p class="hint-photo" id="hintPhoto">Нажмите на фото — следующее</p>
+  <div class="counter" id="counter" aria-live="polite"></div>
+  <button class="skip" id="skip" type="button">Пропустить</button>
+</section>
+
+<section class="letter" id="letter" hidden>
+  <article class="sheet">
+    <h2 class="salute">Дорогая бабуля!</h2>
+    <div class="rule"></div>
+    <p>3 октября мы с Настей поженились и очень хотим отметить это с самыми близкими — по-семейному, в узком кругу. Будем очень рады тебя видеть!</p>
+
+      <div class="when">
+        <div class="when-row"><span class="when-label">Когда</span><b>6 ноября, пятница,</b><span class="val">с 17:00 примерно до 20:00</span></div>
+        <div class="when-row"><span class="when-label">Где</span><b>Ресторан «Флоренция»,</b><span class="val">ул. Худайбердина, 198б</span></div>
+      </div>
+    <p>Будут папа со Светой, тётя Люда и Кирилл с девушкой Дианой.</p>
+    <p>Дресс-код — нарядно, но без официоза.</p>
+    <p>И одна скромная просьба ко всем — не опаздывать. По нашей новой семейной традиции опоздавший говорит тост без подготовки 😄</p>
+    <p>Напиши, пожалуйста, получится ли прийти: нам нужно подтвердить стол.</p>
+    <p class="sig"><span class="hand-sig">Влад и Настя</span><span class="ring">💍</span></p>
+    <div class="btns">
+      <a class="btn btn-dark" href="https://yandex.ru/maps/?text=%D0%A1%D1%82%D0%B5%D1%80%D0%BB%D0%B8%D1%82%D0%B0%D0%BC%D0%B0%D0%BA%2C%20%D1%83%D0%BB.%20%D0%A5%D1%83%D0%B4%D0%B0%D0%B9%D0%B1%D0%B5%D1%80%D0%B4%D0%B8%D0%BD%D0%B0%2C%20198%D0%B1" target="_blank" rel="noopener">Как добраться</a>
+      <button class="btn btn-ghost" id="again" type="button">Посмотреть ещё раз</button>
+    </div>
+    <p class="days" id="days" hidden></p>
+    <svg class="horizon-ink" viewBox="0 0 390 160" preserveAspectRatio="none" aria-hidden="true" fill="none" stroke="#3B2622" stroke-width="1" stroke-linecap="round">
+      <path d="M0,118 C14,100 36,96 52,106 C62,112 70,116 82,112 C98,100 120,98 134,108 C142,114 150,117 162,116 L230,116 C250,116 262,104 276,96 C288,89 298,100 312,82 C322,69 340,86 352,78 C364,72 376,90 390,96"/>
+      <g stroke-width=".75" stroke-opacity=".8"><path d="M44,100 L40,107"/><path d="M50,102 L46,110"/><path d="M126,102 L122,109"/><path d="M132,104 L128,112"/><path d="M302,90 L296,98"/><path d="M308,86 L302,95"/><path d="M346,80 L340,88"/><path d="M372,84 L366,92"/></g>
+    </svg>
+  </article>
+</section>
+
+<script src="js/app.js"></script>
+</body>
+</html>
